@@ -29,11 +29,36 @@ function UI() {
     }
 
 // replace by form reset called by the create submit event listener
-    // UI.prototype.clearFields = function () {
-    //     document.getElementById('title').value = ""
-    //     document.getElementById('author').value = ""
-    //     document.getElementById('value').value = ""
-    // }
+// UI.prototype.clearFields = function () {
+//     document.getElementById('title').value = ""
+//     document.getElementById('author').value = ""
+//     document.getElementById('value').value = ""
+// }
+}
+
+UI.prototype.clearList = function () {
+    document.querySelector('#book-list').innerHTML = ""
+    // sessionStorage.clear()
+}
+
+UI.prototype.clearLs = function () {
+    sessionStorage.clear()
+}
+
+UI.prototype.showAlert = function (msg,className) {
+    const div = document.createElement('div')
+    div.className = `alert ${className}`
+    div.appendChild(document.createTextNode(msg))
+    //get parent
+    const container = document.querySelector('.container')
+    const table = document.querySelector('table')
+    //insert alert
+    container.insertBefore(div,table)
+
+    //disappear after 3 seconds
+    setTimeout(function(){
+        document.querySelector('.alert').remove()
+    },3000)
 }
 
 // event listeners
@@ -49,18 +74,25 @@ document.getElementById('book-form').addEventListener('submit',
 
         const ui = new UI();
 
-        ui.addBookToList(book);
-
-        document.getElementById('book-form').reset()
+        // validate
+        if (title === '' || author == '' || isbn === '') {
+            // error alert
+            ui.showAlert('Please fill in all fields','error');
+            document.getElementById('book-form').reset()
+        } else {
+            ui.addBookToList(book);
+            document.getElementById('book-form').reset()
+        }
 
         e.preventDefault()
     }
 )
 
-// document.getElementById('clear-list').addEventListener('click',
-//     function () {
-//         const ui = new UI();
-//         ui.clearBookList();
-//     }
-// )
+document.getElementById('clear-list').addEventListener('click',
+    function () {
+        const ui = new UI();
+        ui.clearList();
+        ui.clearLs();
+    }
+)
 
