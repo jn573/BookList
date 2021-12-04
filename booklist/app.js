@@ -81,7 +81,7 @@ document.getElementById('book-form').addEventListener('submit',
         const ui = new UI();
 
         // validate
-        if (title === '' || author == '' || isbn === '') {
+        if (title === '' || author === '' || isbn === '') {
             // error alert
             ui.showAlert('Please fill in all fields', 'error');
             document.getElementById('book-form').reset()
