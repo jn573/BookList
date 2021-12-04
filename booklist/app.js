@@ -18,7 +18,7 @@ UI.prototype.addBookToList = function (book) {
         `<td>${book.title}</td>
         <td>${book.author}</td>
         <td>${book.isbn}</td>
-        <td>Success</td>`
+        <td><a href="#" class="delete">X</a></td>`
     list.appendChild(row)
     saveToLs()
 }
@@ -45,7 +45,13 @@ UI.prototype.clearLs = function () {
     sessionStorage.clear()
 }
 
-UI.prototype.showAlert = function (msg,className) {
+UI.prototype.deleteBook = function (target) {
+    if (target.className === 'delete') {
+        target.parentElement.parentElement.remove()
+    }
+}
+
+UI.prototype.showAlert = function (msg, className) {
     const div = document.createElement('div')
     div.className = `alert ${className}`
     div.appendChild(document.createTextNode(msg))
@@ -53,12 +59,12 @@ UI.prototype.showAlert = function (msg,className) {
     const container = document.querySelector('.container')
     const table = document.querySelector('table')
     //insert alert
-    container.insertBefore(div,table)
+    container.insertBefore(div, table)
 
     //disappear after 3 seconds
-    setTimeout(function(){
+    setTimeout(function () {
         document.querySelector('.alert').remove()
-    },3000)
+    }, 2000)
 }
 
 // event listeners
@@ -77,16 +83,26 @@ document.getElementById('book-form').addEventListener('submit',
         // validate
         if (title === '' || author == '' || isbn === '') {
             // error alert
-            ui.showAlert('Please fill in all fields','error');
+            ui.showAlert('Please fill in all fields', 'error');
             document.getElementById('book-form').reset()
         } else {
             ui.addBookToList(book);
             document.getElementById('book-form').reset()
+            ui.showAlert('Book added to list', 'success')
         }
 
         e.preventDefault()
     }
 )
+
+//event listener for delete
+document.getElementById('book-list').addEventListener('click', function (e) {
+    const ui = new UI()
+
+    ui.deleteBook(e.target);
+    ui.showAlert('Book removed from list', 'success');
+    e.preventDefault()
+})
 
 document.getElementById('clear-list').addEventListener('click',
     function () {
